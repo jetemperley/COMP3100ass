@@ -2,13 +2,14 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class LRR{
+public class LRR2{
 	
 	DataOutputStream out;
 	BufferedReader in;
 	String inMsg;
 	
-	LRR(int port){
+	
+	LRR2(int port){
 		try {
 			inMsg = "";
 			Socket s = new Socket("localhost", port);
@@ -27,7 +28,8 @@ public class LRR{
 				new BufferedReader(new InputStreamReader(s.getInputStream()));
 		}catch (Exception e){
 			System.out.println("setup error");
-		}			
+		}
+		
 	}
 	
 	public void send(String msg){
@@ -46,17 +48,30 @@ public class LRR{
 	public List<String> receive(){
 		List<String> lines = new ArrayList();
 		try {
+			
+			String str = (String) in.readLine();
 			System.out.println("Received: ");
-			lines.add((String) in.readLine());
-			System.out.println("    " + lines.get(0));
-			String str;
+			System.out.println("    " + str);
+			if (str.split(" ")[0].equals("JCPL")){
+				System.out.println("ignored");
+				send("REDY");
+				return receive();
+				
+			} 
+			lines.add(str);
+			
 			while (in.ready()){
 				str = in.readLine();
+				if (str.split(" ")[0].equals("JCPL")){
+					System.out.println("discarded");
+					continue;
+				}
 				lines.add(str);
 				System.out.println("    " + lines.get(lines.size()-1));
 			}
 		} catch (Exception e){
 			System.out.println("receiver error");
+			e.printStackTrace();
 		}
 		return lines;
 	}
@@ -79,7 +94,7 @@ public class LRR{
 			int port = Integer.parseInt(num);
 			
 			
-			LRR serv = new LRR(port);
+			LRR2 serv = new LRR2(port);
 			serv.send("HELO");
 			serv.receive();
 			
@@ -96,6 +111,7 @@ public class LRR{
 			List<String> svrList = 
 				serv.receive();
 			serv.send("OK");
+			serv.receive();
 			
 			// get the largest server from the list
 			int largestSize = -1;
@@ -119,18 +135,21 @@ public class LRR{
 			int svrID = Integer.parseInt(entry[1]);
 			String svrType = entry[0];
 			
-			// while (!job[0].equals("QUIT")){
+			while (!job[0].equals("NONE")){
 				int jobID = Integer.parseInt(job[2]);
 				
 				serv.send("SCHD " + 
 					jobID + " " + 
 					svrType + " " +
 					svrID);
+				serv.receive();
+				serv.send("REDY");
 				job = serv.receive().get(0).split(" ");
-			// }
+			}
 			
 			// SCHD jobID serverType serverID
 			// JOBN submitTime jobID estRuntime core memory disk
+			
 			serv.send("QUIT");
 			serv.receive();
 			serv.close();
