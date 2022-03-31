@@ -8,6 +8,7 @@ public class Client{
 	BufferedReader in;
 	List<String[]> servers;
 	Scheduler sched;
+	String[] job;
 
 
 	Client(int port){
@@ -36,7 +37,7 @@ public class Client{
 		receive();
 
 		send("REDY");
-		receive().get(0).split(" ");
+		job = receive().get(0).split(" ");
 
 		// default scheduler is LLR
 		sched = new LRR(this);
@@ -48,9 +49,9 @@ public class Client{
 	public void send(String msg){
 		try {
 			out.flush();
-			// System.out.println("Send: ");
+			System.out.println("Send: ");
 			msg = msg + "\n";
-			// System.out.print("    " + msg);
+			System.out.print("    " + msg);
 			out.write(msg.getBytes());
 			out.flush();
 		} catch (Exception e){
@@ -64,13 +65,15 @@ public class Client{
 
 			String str = (String) in.readLine();
 			// System.out.println("Received: ");
-			// System.out.println("    " + str);
+
 			if (str.split(" ")[0].equals("JCPL")){
 				// System.out.println("ignored");
 				send("REDY");
 				return receive();
 
 			}
+			System.out.println("Received: ");
+			System.out.println("    " + str);
 			lines.add(str);
 
 			while (in.ready()){
@@ -82,7 +85,8 @@ public class Client{
 			// SCHD jobID serverType serverID
 			// JOBN submitTime jobID estRuntime core memory disk
 				lines.add(str);
-				// System.out.println("    " + lines.get(lines.size()-1));
+
+				System.out.println("    " + lines.get(lines.size()-1));
 			}
 		} catch (Exception e){
 			System.out.println("receiver error");
@@ -109,8 +113,7 @@ public class Client{
 	}
 
 	void scheduleAllJobs(){
-		send("REDY");
-		String[] job = receive().get(0).split(" ");
+		
 		while (!job[0].equals("NONE")){
 			sched.schedule(job, this);
 			send("REDY");

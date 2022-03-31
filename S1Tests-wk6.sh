@@ -1,5 +1,5 @@
 #!/bin/bash
-# make sure you have your client and ds-sim (ds-server and ds-client) all in the same directory and test configuration files in configs directory 
+# make sure you have your client and ds-sim (ds-server and ds-client) all in the same directory and test configuration files in configs directory
 # to kill multiple runaway processes, use 'pkill runaway_process_name'
 # For the Java implementation, use the following format: ./demoS1Final.sh [Java specific arugment...] [-n] your_client.class [your client specific argument...]
 configDir="./S1testConfigs"
@@ -82,7 +82,7 @@ for conf in $configDir/*.xml; do
 		sleep 4
 		./ds-client -a lrr
 	fi
-	
+
 	echo "running your implementation ($yourClient)..."
 	sleep 2
 	if [[ $newline == "n" ]]; then
@@ -107,4 +107,3 @@ for conf in $configDir/*.xml; do
 done
 
 echo "testing done! check $configDir/$diffLog"
-
