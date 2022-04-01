@@ -1,13 +1,24 @@
+/*
+	Author: Jacob Temperley
+	Student number: 44816936
+	Email: jacob.temperley@students.mq.edu.au
+
+	This class is the implementation of the Largest Round Robin
+	algorithm for use with the Client class and ds-server.exe
+
+*/
+
 import java.util.*;
 
 class LRR implements Scheduler{
 
-	List<String> servers;
-	List<String[]> largest;
-	int current = 0;
+	List<String> servers;	// list of servers
+	List<String[]> largest; // list of the largest type of server
+	int current = 0;		// current server in rotation
 
 
 	LRR(Client client){
+		// get a list of servers
 		client.send("GETS All");
 		client.receive();
 
@@ -42,11 +53,12 @@ class LRR implements Scheduler{
 
 		if (entry == null){
 			System.out.println(
-				"there are no servers to assign to");
+				"Error, there are no servers to assign jobsto");
 			System.exit(1);
 		}
 	}
 
+	// the scheduler takes a job and sends the scheduling decision
 	public void schedule(String[] job, Client client){
 
 		int jobID = Integer.parseInt(job[2]);
