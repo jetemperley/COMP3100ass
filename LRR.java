@@ -37,8 +37,6 @@ class LRR implements Scheduler{
 			String[] parts = servers.get(i).split(" ");
 			if (parts[0].equals(entry[0])){
 				largest.add(parts);
-			} else {
-				break;
 			}
 		}
 

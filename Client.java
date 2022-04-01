@@ -49,9 +49,9 @@ public class Client{
 	public void send(String msg){
 		try {
 			out.flush();
-			System.out.println("Send: ");
+			// System.out.println("Send: ");
 			msg = msg + "\n";
-			System.out.print("    " + msg);
+			// System.out.print("    " + msg);
 			out.write(msg.getBytes());
 			out.flush();
 		} catch (Exception e){
@@ -72,8 +72,8 @@ public class Client{
 				return receive();
 
 			}
-			System.out.println("Received: ");
-			System.out.println("    " + str);
+			// System.out.println("Received: ");
+			// System.out.println("    " + str);
 			lines.add(str);
 
 			while (in.ready()){
@@ -86,7 +86,7 @@ public class Client{
 			// JOBN submitTime jobID estRuntime core memory disk
 				lines.add(str);
 
-				System.out.println("    " + lines.get(lines.size()-1));
+				// System.out.println("    " + lines.get(lines.size()-1));
 			}
 		} catch (Exception e){
 			System.out.println("receiver error");
