@@ -160,6 +160,7 @@ The server has the responsibilities of,
 \end{itemize}
 
 \section{Implementation}
+\subsection{Design pattern}
 Starting from the largest scale implementation details, we have one main object-oriented pattern, a strategy pattern. This is where the scheduling algorithm is encapsulated into its own class and implements the Scheduler interface. The client has a Scheduler but doesn’t need to know the exact implementation of it, meaning we can define a new Scheduler that uses a different algorithm later and insert it into the client. For now, we only have one algorithm which is the Largest Round Robin (LRR). This setup of composition and implementation is shown in figure 2 where the black diamond indicates the composition relationship between Client and Scheduler, and the implementing relationship is indicated by the dotted arrow between Scheduler and LRR.
 
 \begin{figure}
@@ -169,9 +170,19 @@ Starting from the largest scale implementation details, we have one main object-
     \label{fig:class}
 \end{figure}
 
-Diving a little deeper into the client code, it’s all written in Java and uses some of the native java libraries. The most important of these libraries is java.net of which we use the Socket class. The Socket class encapsulates the networking concept of an IP address combined with a port which is used to direct packets to another program. In our case the other program is on the local machine which means the IP address is not necessary, but the socket still requires a port to properly address the destination.
+\subsection{Class details}
 
-\section{Links}
-https://github.com/jetemperley/COMP3100ass
+Diving a little deeper into the client code, it’s all written in Java and uses some of the native java libraries. The most important of these libraries is java.net of which we use the Socket\cite{socket} class. The Socket class encapsulates the networking concept of an IP address combined with a port which is used to direct packets to another program. In our case the other program is on the local machine which means the IP address is not necessary, but the socket still requires a port to properly address the destination.\par
+We also require java.io, of which we used two important classes: DataOutputSream\cite{out} and BufferedReader\cite{read}. Both of these classes are very similar, they wrap data streams to and from the Socket so we can send and receive messages from the server program. Our Client class takes this a step further and wraps the Socket, DataOutputSream, BufferedReader, and Scheduler into a single class which manages the job scheduling for the server.
+\subsubsection{Client}
+The Client is broken up into 3 crucial parts: the constructor Client(), receive(), and send(). The constructor takes a port number which sets up the socket, streams, and does the handshake protocol with the server. The send() function just hides the details of the DataOutputStream, you pass send() a message, which is processed and sent. The receive() function simplifies the processing of message from the server, which may by multiple lines of response (from a GETS for example) or a job completion message (which is recursively discarded). Finally the scheduleAllJobs() is just a function which loops through send(), receive() and schedule() until all jobs are complete.\par
+\subsubsection{LRR}
+Finally the LRR scheduler has only 2 functions, the constructor and schedule(). The constructor sets up LRR with all the data it needs to make scheduling decisions (this may not be the case for future algorithms), importantly it gets the server list and determines the largest server type. Schedule() then rotates scheduling through all of the largest servers, one by one.
+All of the classes also use standard java.util List and ArrayList to manage variable length lists where necessary.
 
+
+\subsection{Github link}
+\url{https://github.com/jetemperley/COMP3100ass}
+\bibliographystyle{plain}
+\bibliography{comp3100project}
 \end{document}
