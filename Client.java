@@ -15,12 +15,10 @@ public class Client{
 		try {
 			Socket s = new Socket("localhost", port);
 
-			if (s.isConnected()){
-				System.out.println("Connected successfully");
-			} else {
+			if (!s.isConnected()){
 				System.out.println("Could not connect");
 				s.close();
-				return;
+				System.exit(1);
 			}
 
 			out = new DataOutputStream(s.getOutputStream());
