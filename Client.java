@@ -22,7 +22,7 @@ public class Client{
 	private String[] job;
 
 
-	Client(int port){
+	Client(int port, String algo){
 		Socket s = null;
 		try {
 			s = new Socket("localhost", port);
@@ -51,9 +51,19 @@ public class Client{
 
 		send("REDY");
 		job = receive().get(0).split(" ");
-
-		// default scheduler is LLR
-		sched = new LRR(this);
+		
+		switch (algo){
+			case "fc":
+				sched = new FC();
+				break;
+			case "LRR":
+				sched = new LRR(this);
+				break;
+			case "Alg1":
+				sched = new Alg1();
+				break;
+		}
+		
 
 	}
 
@@ -101,6 +111,40 @@ public class Client{
 		return lines;
 	}
 	
+	public List<String> comm(String s){
+		send(s);
+		return receive();
+	}
+	
+	public List<String> getServers(){ 
+		 
+		return getServers("All", "", "", "");
+	}
+	
+	public List<String> getServers(String qual, String core, String mem, String disk){
+		send("GETS " + qual + " " + core + " " + mem + " " + disk);
+		receive();
+		List<String> lst =  ok();
+		ok();
+		return lst;
+	}
+	
+	public List<String> ok(){
+		send("OK");
+		return receive();
+	}
+	
+	public int estJobWaitTime(String srvType, String srvId){
+		send("EJWT " + srvType + " " + srvId);
+		int wait = Integer.parseInt(receive().get(0));
+		return wait;
+	}	
+	
+	public void schd(String jobId, String type, String id) {
+		send("SCHD " + jobId + " " + type + " " + id);
+		receive();
+	}
+	
 	// close the connection
 	public void close(){
 		try {
@@ -135,13 +179,35 @@ public class Client{
 	}
 
 	public static void main (String[] args){
-		if (args.length == 0){
-			System.out.println("Usage: Client <port number>");
-			System.exit(1);
+		// default arguments
+		int pnum = 50000;
+		String algo = "fc";
+		
+		// categorise arguments and overwrite defaults 
+		for (int i = 0; i < args.length; i++){
+			int type = catArg(args[i]);
+			if (type == -1){
+				algo = args[i];
+			} else {
+				pnum = type;
+			}
 		}
-		Client serv = new Client(Integer.parseInt(args[0]));
+		
+		Client serv = new Client(pnum, algo);
 		serv.scheduleAllJobs();
 
-
+	}
+	
+	static int catArg(String arg){
+		try {
+			int num = Integer.parseInt(arg);
+			if (num < 0){
+				System.out.println("Error: port was negative");
+				System.out.println("Usage: Client <port number> <algorithm>");
+				System.exit(1);
+			}
+			return num;
+		} catch (Exception e){}
+		return -1;
 	}
 }
