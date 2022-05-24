@@ -5,9 +5,9 @@ public class Alg1 implements Scheduler {
 	
 	
 	
-	public void schedule(String[] job, Client client){
+	public void schedule(Job j, Client client){
 		
-		List<String> servers = client.getServers("Capable ", job[4], job[5], job[6]);
+		List<String> servers = client.getServers("Capable ", j.core, j.mem, j.disk);
 		
 		int lowest = -1;
 		String type = "";
@@ -22,9 +22,12 @@ public class Alg1 implements Scheduler {
 			}
 		}
 		
-		client.schd(job[2], type, id);
+		client.schd(j.jobID, type, id);
 	}
 	
-	public void jobCompleted(String[] job, Client c){}
+	public void jobCompleted(JobComplete jc, Client c)
+	{
+		
+	}
 	
 }

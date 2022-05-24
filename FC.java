@@ -5,9 +5,9 @@ public class FC implements Scheduler {
 	
 	
 	
-	public void schedule(String[] job, Client client){
+	public void schedule(Job job, Client client){
 		
-		client.send("GETS Capable " + job[4] +" " +job[5] +" " +job[6]);
+		client.send("GETS Capable " + job.core +" " + job.mem +" " + job.disk);
 		client.receive();
 
 		client.send("OK");
@@ -17,10 +17,9 @@ public class FC implements Scheduler {
 		client.receive();
 		
 		String[] srv = servers.get(0).split(" ");
-		int jobID = Integer.parseInt(job[2]);
 		
 		client.send("SCHD " +
-			jobID + " " +
+			job.jobID + " " +
 			srv[0] + " " +
 			Integer.parseInt(srv[1]));
 		client.receive();
@@ -29,6 +28,6 @@ public class FC implements Scheduler {
 	
 	}
 	
-	public void jobCompleted(String[] job, Client c){}
+	public void jobCompleted(JobComplete job, Client c){}
 	
 }

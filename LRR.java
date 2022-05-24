@@ -59,14 +59,14 @@ class LRR implements Scheduler{
 	}
 
 	// the scheduler takes a job and sends the scheduling decision
-	public void schedule(String[] job, Client client){
+	public void schedule(Job job, Client client)
+	{
 
-		int jobID = Integer.parseInt(job[2]);
 		String[] currServ =	largest.get(current);
 
 
 		client.send("SCHD " +
-			jobID + " " +
+			job.jobID + " " +
 			currServ[0] + " " +
 			Integer.parseInt(currServ[1]));
 		client.receive();
@@ -76,5 +76,8 @@ class LRR implements Scheduler{
 
 	}
 	
-	public void jobCompleted(String[] job, Client c){}
+	public void jobCompleted(JobComplete job, Client c)
+		{
+		
+		}
 }

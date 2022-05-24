@@ -62,6 +62,9 @@ public class Client{
 			case "Alg1":
 				sched = new Alg1();
 				break;
+			case "Alg2":
+				sched = new Alg2(this);
+				break;
 		}
 		
 
@@ -162,16 +165,18 @@ public class Client{
 	void scheduleAllJobs(){
 		
 		while (!job[0].equals("NONE")){
+		
+			// all the cmds we want to handle
 			switch(job[0]) {
 				
 				// job completed
 				case "JCPL":
-					sched.jobCompleted(job, this);
+					sched.jobCompleted(new JobComplete(job), this);
 				break;
 				
 				// new job to schedule
 				case "JOBN":
-					sched.schedule(job, this);
+					sched.schedule(new Job(job), this);
 				break;
 				
 			
