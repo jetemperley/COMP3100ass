@@ -1,7 +1,7 @@
 
 import java.util.*;
 
-public class Alg1 implements Scheduler {
+public class Alg2 implements Scheduler {
 	
 	
 	
@@ -12,5 +12,7 @@ public class Alg1 implements Scheduler {
 		
 		
 	}
+	
+	public void jobCompleted(String[] job, Client c){}
 	
 }

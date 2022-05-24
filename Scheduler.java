@@ -13,5 +13,6 @@ public interface Scheduler {
 	// the scheduler takes a job and sends the scheduling decision
 	// the job is a string array split by spaces
 	public void schedule(String[] job, Client c);
+	public void jobCompleted(String[] job, Client c);
 	
 }

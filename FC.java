@@ -29,4 +29,6 @@ public class FC implements Scheduler {
 	
 	}
 	
+	public void jobCompleted(String[] job, Client c){}
+	
 }

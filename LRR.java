@@ -75,4 +75,6 @@ class LRR implements Scheduler{
 		current = current%largest.size();
 
 	}
+	
+	public void jobCompleted(String[] job, Client c){}
 }

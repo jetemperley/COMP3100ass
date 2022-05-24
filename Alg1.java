@@ -25,4 +25,6 @@ public class Alg1 implements Scheduler {
 		client.schd(job[2], type, id);
 	}
 	
+	public void jobCompleted(String[] job, Client c){}
+	
 }

@@ -86,14 +86,6 @@ public class Client{
 		try {
 
 			String str = (String) in.readLine();
-			if (str.split(" ")[0].equals("JCPL")){
-				// if the message is a job completion 
-				// then discard it and wait for a new message
-				// TODO: refactor this in stage 2 for the scheduler to handle 
-				send("REDY");
-				return receive();
-
-			}
 			lines.add(str);
 
 			// on a GETS for example, there may be many lines to read
@@ -170,7 +162,21 @@ public class Client{
 	void scheduleAllJobs(){
 		
 		while (!job[0].equals("NONE")){
-			sched.schedule(job, this);
+			switch(job[0]) {
+				
+				// job completed
+				case "JCPL":
+					sched.jobCompleted(job, this);
+				break;
+				
+				// new job to schedule
+				case "JOBN":
+					sched.schedule(job, this);
+				break;
+				
+			
+			}
+			
 			send("REDY");
 			job = receive().get(0).split(" ");
 		}
