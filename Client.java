@@ -124,6 +124,14 @@ public class Client{
 		return lst;
 	}
 	
+	public void migj(String jobID, String srcType, String srcID, 
+		String tgtType, String tgtID)
+	{
+		send("MIGJ " + jobID + " " + srcType + " " + srcID + 
+			" " + tgtType + " " + tgtID);
+		receive();	
+	}
+	
 	public List<String> ok(){
 		send("OK");
 		return receive();

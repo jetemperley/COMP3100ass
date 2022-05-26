@@ -3,27 +3,36 @@ import java.util.*;
 
 public class LengthPriority implements Scheduler {
 	
-	List<String> all;
+	List<Server> servers;
+	
 	
 	public Alg2(Client c){
-		all = c.getServers();
+		List<String> all = c.getServers();
+		servers = new ArrayList();
+		for (String s : all){
+			servers.add(new Server(s.split(" ")));
+		}
 	}
 	
 	public void schedule(Job j, Client client)
 	{
 		
-		List<String> avail = client.getServers(
+		List<String> servs = client.getServers
+		(
 			"Avail", j.core, j.mem, j.disk
 		);
 		
-		List<String> capable = client.getServers
+		
+		
+		
+		servs = client.getServers
 		(
 			"Capable ", j.core, j.mem, j.disk
 		);
 		
 		for (int i = 0; i < capable.size(); i++)
 		{
-			String[] serv
+			Server serv = capable.get(i).split(" ");
 			if ()	
 		}
 		
