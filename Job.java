@@ -35,3 +35,29 @@ class JobComplete {
 		servID = jcpl [4];
 	}
 }
+
+class JobState {
+	
+	String id;
+	String state;
+	String subTime;
+	String startTime;
+	String estRun;
+	String core;
+	String mem;
+	String disk;
+	
+	public JobState(String[] str){
+		
+		
+		id = str[0];
+		state = str[1];
+		subTime = str[2];
+		startTime = str[3];
+		estRun = str[4];
+		core = str[5];
+		mem = str[6];
+		disk = str[7];
+	}
+
+}

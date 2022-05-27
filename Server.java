@@ -1,6 +1,6 @@
 
 
-public class Server(){
+public class Server{
 	
 	String type;
 	String id;
@@ -14,15 +14,17 @@ public class Server(){
 	
 	public Server(String[] serv)
 	{
-		type = serv[1];
-		id = serv[2];
-		state = serv[3];
-		startTime = serv[4];
-		core = serv[5];
-		mem = serv[6];
-		disk = serv[7];
-		waiting = serv[8]; 
-		running = serv[9];
+		
+		
+		type = serv[0];
+		id = serv[1];
+		state = serv[2];
+		startTime = serv[3];
+		core = serv[4];
+		mem = serv[5];
+		disk = serv[6];
+		waiting = serv[7]; 
+		running = serv[8];
 		 
 	}
 
