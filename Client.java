@@ -63,7 +63,10 @@ public class Client{
 				sched = new Alg1();
 				break;
 			case "Alg2":
-				sched = new Alg2(this);
+				sched = new LengthPriority(this);
+				break;
+			case "check":
+				sched = new Check(this);
 				break;
 		}
 		
@@ -111,17 +114,25 @@ public class Client{
 		return receive();
 	}
 	
-	public List<String> getServers(){ 
+	public List<Server> getServers(){ 
 		 
 		return getServers("All", "", "", "");
 	}
 	
-	public List<String> getServers(String qual, String core, String mem, String disk){
+	public List<Server> getServers(String qual, String core, String mem, String disk){
 		send("GETS " + qual + " " + core + " " + mem + " " + disk);
 		receive();
 		List<String> lst =  ok();
 		ok();
-		return lst;
+		if (lst.get(0).equals("."))
+			lst.remove(0);
+		List<Server> srv = new ArrayList();
+		
+		for (String s : lst){
+			// System.out.println(s);
+			srv.add(new Server(s.split(" ")));
+		}
+		return srv;
 	}
 	
 	public void migj(String jobID, String srcType, String srcID, 
@@ -137,7 +148,25 @@ public class Client{
 		return receive();
 	}
 	
-	public int estJobWaitTime(String srvType, String srvId){
+	public List<JobState> listJobs(String srvType, String srvID){
+		send("LSTJ " + srvType + " " + srvID);
+		receive();
+		List<String> lst = ok();
+		ok();
+		List<JobState> jobs = new ArrayList();
+		for (String s : lst){
+			jobs.add(new JobState(s.split(" ")));
+		}
+		return jobs;
+	}
+	
+	public void push(){
+		send("PSHJ");
+		receive();
+		
+	}
+	
+	public int estWait(String srvType, String srvId){
 		send("EJWT " + srvType + " " + srvId);
 		int wait = Integer.parseInt(receive().get(0));
 		return wait;
@@ -146,6 +175,13 @@ public class Client{
 	public void schd(String jobId, String type, String id) {
 		send("SCHD " + jobId + " " + type + " " + id);
 		receive();
+	}
+	
+	// state 1 is waiting, 2 is running
+	public int nJobs(String type, String id, String state){
+		send("CNTJ " + type + " " + id + " " + state);
+		int n = Integer.parseInt(receive().get(0));
+		return n;
 	}
 	
 	// close the connection
@@ -184,6 +220,10 @@ public class Client{
 				
 				// new job to schedule
 				case "JOBN":
+					sched.schedule(new Job(job), this);
+				break;
+				
+				case "JOBP":
 					sched.schedule(new Job(job), this);
 				break;
 				
