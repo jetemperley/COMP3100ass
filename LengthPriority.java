@@ -71,7 +71,7 @@ public class LengthPriority implements Scheduler {
 				shortServ = s;
 			}
 		}
-		c.migj(js.id, type, id, shortServ.type, shortServ.id);
+		c.migrate(js.id, type, id, shortServ.type, shortServ.id);
 	}
 	
 	

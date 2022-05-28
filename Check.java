@@ -36,7 +36,7 @@ public class Check implements Scheduler{
 						List<Server> a = c.getServers("Avail", job.core, job.mem, job.disk);
 						if (a.size() > 0){
 							Server t = a.get(0);
-							c.migj(job.id, s.type, s.id, t.type, t.id);
+							c.migrate(job.id, s.type, s.id, t.type, t.id);
 						}
 						
 					}

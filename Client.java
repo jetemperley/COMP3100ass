@@ -135,7 +135,7 @@ public class Client{
 		return srv;
 	}
 	
-	public void migj(String jobID, String srcType, String srcID, 
+	public void migrate(String jobID, String srcType, String srcID, 
 		String tgtType, String tgtID)
 	{
 		send("MIGJ " + jobID + " " + srcType + " " + srcID + 
