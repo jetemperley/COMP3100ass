@@ -6,4 +6,6 @@ The class with the main function is Client, which can take 0, 1, or 2 arguments 
 
 The stage 2 algorithm can be run with "Client check"
 
+The stage 2 test suite can be run with ./stage2-test-x86 "java Client check" -o tt -n
+
 The report pdf is in docs/dsReport.pdf, the latex files for the pdf are in docs/latexdoc/.
